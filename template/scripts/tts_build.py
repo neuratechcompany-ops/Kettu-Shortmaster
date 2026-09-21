@@ -238,7 +238,7 @@ _kokoro = None
 # kokoro 读音覆写（只影响送给 TTS 的文本，字幕仍显示原词）。语法是 kokoro/misaki 的 [词](/音标/)，
 # **只对 `kokoro` 引擎生效**（piper / kokoro_onnx 走 espeak 音素化，不认这个语法，会把括号读出来）。
 # 模板默认为空，按本片增补：kokoro 常把生僻缩写逐字母拼读、把 "v5.0" 读成 "v five zero"，合成前 dump 音素检查。
-# 写法示例：'CUDA': '[CUDA](/kˈudə/)'，'v5.0': '[v5.0](/vˈi fˈIv pYnt ˈO/)'
+# 写法示例：'API': '[API](/eɪ pˈiː ˈaɪ/)'，'v5.0': '[v5.0](/vˈi fˈIv pYnt ˈO/)'
 PRONOUNCE = {}
 
 
