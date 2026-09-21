@@ -1,11 +1,12 @@
 # 字体许可
 
-本目录随附的四款字体均以 **SIL Open Font License, Version 1.1** 分发，许可全文见本文件末尾。
+本目录随附的五款字体均以 **SIL Open Font License, Version 1.1** 分发，许可全文见本文件末尾。
 各字体的版权与保留字体名（取自字体自身的 name 表）：
 
 | 文件 | 字体 | 版权声明 |
 |---|---|---|
 | `NotoSansSC.ttf` | Noto Sans SC | (c) 2014-2021 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'. |
+| `InterVariable.ttf` | Inter | Copyright (c) 2016-2024 The Inter Project Authors (https://github.com/rsms/inter), with Reserved Font Name 'Inter'. |
 | `Orbitron[wght].ttf` | Orbitron | Copyright 2018 The Orbitron Project Authors (https://github.com/theleagueof/orbitron), with Reserved Font Name: "Orbitron". |
 | `Exo2-Italic.ttf` | Exo 2 | Copyright 2013 The Exo 2 Project Authors (https://github.com/googlefonts/Exo-2.0) |
 | `Audiowide-Regular.ttf` | Audiowide | Copyright (c) 2012 by Brian J. Bonislawsky DBA Astigmatic (AOETI) (astigma@astigmatic.com), with Reserved Font Name "Audiowide" |

@@ -26,6 +26,9 @@ export const textEm = (s: string, emScale = 1): number => {
     else if (ch >= 'A' && ch <= 'Z') em += 0.668;
     else if (ch >= '0' && ch <= '9') em += 0.59;
     else if (ch >= 'a' && ch <= 'z') em += 0.566;
+    else if (c >= 0x410 && c <= 0x42f) em += 0.668;        // 西里尔大写 А–Я
+    else if (c >= 0x430 && c <= 0x44f) em += 0.566;        // 西里尔小写 а–я
+    else if (c >= 0x400 && c <= 0x4ff) em += 0.60;         // 其余西里尔（Ёё Йй 及扩展）
     else if (c >= 0xc0 && c < 0x250) em += 0.58;           // 带重音的拉丁字母（Latin-1 / Extended-A / B）
     else em += 0.325;                                      // 半角标点
   }

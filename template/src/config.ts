@@ -7,11 +7,11 @@ export type RailSpec = {steps: string[]; switchS: string[]; fromS: string; toS: 
 export const VIDEO = {
   slug: 'demo', // 素材目录 public/assets/<slug>/（配音 audio.wav 由 tts_build.py 写到这里）
   /**
-   * 片子语言：'zh' 中文（默认）｜'en' 英文。
+   * 片子语言：'zh' 中文（默认）｜'en' 英文｜'ru' 俄文（西里尔，走拉丁分支：不压窄、不补基线，TTS 默认 edge ru-RU-DmitryNeural）。
    * 影响 → 配音引擎（tts_build.py 的 TTS_ENGINE=auto 也会自己按解说词判语言）、标题/章节卡是否压窄（拉丁不压）、
    * 居中文字的基线补偿（CJK −2 / 拉丁 0）、文案与字幕块长度预算（见 reference/narration-storyboard.md §5）。
    */
-  lang: 'zh' as 'zh' | 'en',
+  lang: 'zh' as 'zh' | 'en' | 'ru',
   /**
    * 幕底：'dots' 点阵波（默认，`common/DotFieldBg.tsx`，video-talkcraft dot-field-wave 移植）｜'stars' 星点 + 雾底渐变（早期样片风格）。
    * 两者互斥；镜头里的 BG_Gn 覆写（`stars:'none'` 关幕底）对两种方案都生效。frame_metrics.py 会按这里的值抠掉幕底再统计。
@@ -27,7 +27,7 @@ export const VIDEO = {
    *  例：{kicker: 'BASED ON', title: '<论文 / 书 / 报告标题>', byline: '<作者 · 出处 · 年份>', note: 'all visuals drawn in code'} */
   credit: null as {kicker: string; title: string; byline: string; note: string} | null,
   /** 片尾署名行（默认开）：有署名卡时排在卡下方，没有署名卡时单独居中。不要就设为 ''。 */
-  builtBy: 'built by Anything2Explainer skill',
+  builtBy: 'built by Kettu-Shortmaster skill',
   /** 章节英文副标（顺序对应 narration 的 CHAPTER 1..n；章节卡从第 2 章起显示；英文片可留空 '' 不渲染）。
    *  和章名一样是「说清讲什么」的标签，不是第二个创意标题；写这章的英文关键词或步骤序列（`Build · Run · Trace`）。 */
   chapterTech: ['Chapter One', 'Chapter Two'],

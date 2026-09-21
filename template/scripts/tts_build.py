@@ -36,7 +36,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REM = ROOT
 _cfg = open(f'{ROOT}/src/config.ts', encoding='utf-8').read()
 SLUG = re.search(r"slug:\s*'([^']+)'", _cfg).group(1)
-_m = re.search(r"lang:\s*'(zh|en)'", _cfg)
+_m = re.search(r"lang:\s*'(zh|en|ru)'", _cfg)
 CFG_LANG = _m.group(1) if _m else 'zh'
 FPS = 30
 SR = 48000
@@ -140,10 +140,16 @@ def cache_path(text, ext):
 
 
 def detect_lang(items):
-    """解说词里 CJK 占比 ≥20% → 'zh'，否则 'en'。"""
+    """解说词里 CJK 占比 ≥20% → 'zh'，西里尔占比 ≥20% → 'ru'，否则 'en'。"""
     txt = ''.join(it['raw'] for it in items if it['type'] == 'sent')
+    n = max(1, len(txt))
     cjk = sum(1 for c in txt if '一' <= c <= '鿿')
-    return 'zh' if cjk >= 0.2 * max(1, len(txt)) else 'en'
+    cyr = sum(1 for c in txt if 0x400 <= ord(c) <= 0x4FF)
+    if cjk >= 0.2 * n:
+        return 'zh'
+    if cyr >= 0.2 * n:
+        return 'ru'
+    return 'en'
 
 
 # 字幕块宽度预判：与 src/common/textfit.ts 用同一张 em 宽表（字体 fontTools 实测），
@@ -151,7 +157,7 @@ def detect_lang(items):
 # 授稿建议仍是每块中文 ≤16 字 / 英文 ≤48 字符（见 narration-storyboard.md）。
 SUB_MAX_W = 1160
 SUB_SIZE = 44
-SUB_BUDGET = {'zh': '16 字', 'en': '48 字符'}
+SUB_BUDGET = {'zh': '16 字', 'en': '48 字符', 'ru': '48 символов'}
 
 
 def text_em(s):
@@ -169,6 +175,12 @@ def text_em(s):
             t += 0.59
         elif 'a' <= ch <= 'z':
             t += 0.566
+        elif 0x410 <= c <= 0x42F:
+            t += 0.668                   # 西里尔大写 А–Я
+        elif 0x430 <= c <= 0x44F:
+            t += 0.566                   # 西里尔小写 а–я
+        elif 0x400 <= c <= 0x4FF:
+            t += 0.60                    # 其余西里尔（Ёё Йй 及扩展）
         elif 0xc0 <= c < 0x250:
             t += 0.58                    # 带重音的拉丁字母
         else:
@@ -390,17 +402,22 @@ async def synth_sentence(chunks, sep=''):
 
 
 async def main(narr):
-    global ENGINE
+    global ENGINE, VOICE
     items = parse(narr)
     lang = detect_lang(items)
     if ENGINE == 'auto':
-        ENGINE = 'edge' if lang == 'zh' else 'kokoro'
+        if lang == 'ru':
+            ENGINE = 'edge'
+            if 'VOICE' not in os.environ:
+                VOICE = 'ru-RU-DmitryNeural'
+        else:
+            ENGINE = 'edge' if lang == 'zh' else 'kokoro'
         print(f'解说词语言 {lang} → TTS_ENGINE={ENGINE}（有偏好请显式传 TTS_ENGINE=…）')
     if lang != CFG_LANG:
         print(f"⚠ src/config.ts 的 lang: '{CFG_LANG}' 与解说词语言 {lang} 不一致——改过来，"
               f"否则标题压窄与居中基线会按错的语言算")
     # 字幕块拼回整句给 TTS 时的连接符：英文词与词之间要有空格（否则 "powerful|but" 会被念成 powerfulbut），中文直接拼
-    sep = ' ' if lang == 'en' else ''
+    sep = ' ' if lang in ('en', 'ru') else ''
     t = LEAD / FPS
     audio_parts = []  # (start_sec, np.array)
     sentences = []; chapters = []
@@ -464,7 +481,12 @@ async def main(narr):
           'gap': GAP, 'para_gap': PARA_GAP, 'chapter_gap': CHAPTER_GAP, 'lead': LEAD, 'tail': TAIL,
           'lang': lang, 'chapters': chapters, 'sentences': sentences, 'chars': total_chars, 'words': total_words,
           'speech_sec': round(speech_sec, 2)}
-    unit, cnt = ('字', total_chars) if lang == 'zh' else ('词', total_words)
+    if lang == 'zh':
+        unit, cnt = '字', total_chars
+    elif lang == 'ru':
+        unit, cnt = 'слов', total_words
+    else:
+        unit, cnt = '词', total_words
     os.makedirs(f'{ROOT}/script', exist_ok=True)
     json.dump(tl, open(f'{ROOT}/script/timeline.json', 'w'), ensure_ascii=False, indent=1)
     with open(f'{ROOT}/script/timeline.md', 'w') as f:
