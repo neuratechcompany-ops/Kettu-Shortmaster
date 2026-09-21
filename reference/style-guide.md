@@ -1,6 +1,6 @@
 # 风格指南（视觉体系）
 
-一句话：**黑底幕底（默认点阵波，可选星点 + 底部雾底渐变）**上的白线条 MG。所有图形是「黑填充 + 白描边 2–3px」或「紫/橙纯色块 + 白描边」；中文超粗黑体（Noto Sans SC 900，常 scaleX .8–.85 压窄）；英文技术词紫色粗斜体 Exo 2；常驻顶部紫胶囊 HUD（下面那行英文副标是灰色 22px 小字，不是第二个标题）、底部 44px 白字黑边字幕、半透明章节进度条。参考帧：`examples/rag/frames/ref_*.jpg`（先看再画）。
+一句话：**黑底幕底（默认点阵波，可选星点 + 底部雾底渐变）**上的白线条 MG。所有图形是「黑填充 + 白描边 2–3px」或「紫/橙纯色块 + 白描边」；中文超粗黑体（Noto Sans SC 900，常 scaleX .8–.85 压窄）；英文技术词紫色粗斜体 Exo 2；常驻顶部紫胶囊 HUD（下面那行英文副标是灰色 22px 小字，不是第二个标题）、底部 44px 白字黑边字幕、半透明章节进度条。参考成片：`examples/` 下的样片（先看再画）。
 
 ## 1. 画布与安全区（1280×720@30fps）
 | 区域 | 像素 | 说明 |
@@ -77,7 +77,7 @@ Noto Sans SC 自带完整拉丁字形（实测 wght 100–900 全覆盖），所
 | `SoftIn` | **默认入场**：8 帧淡入 + 10px 上浮（签名同 GlitchIn） | N f0 children len dy |
 | `GlitchIn`（common） | 12 帧透明度闪烁入场，rgbSplit/slices 变体 | N f0 seq rgbSplit slices |
 | 小工具 | `fadeIn/fadeOut/slideUp/scaleIn/exitAccel/exitFade/stagger/abs` | |
-按主题补图元时放进 `ui.tsx`（如样片补了 DocIcon/DBIcon/ChunkCard/LLMIcon），组内特有的放组目录 `gNui.tsx`。参考实现：`examples/rag/shots_src/*/`。
+按主题补图元时放进 `ui.tsx`（如样片补了 DocIcon/DBIcon/ChunkCard/LLMIcon），组内特有的放组目录 `gNui.tsx`。
 
 光效 / 高光时刻 / 纵深 / 运镜图元在 `src/fx.tsx`（`import {…} from '../../fx'`）：
 | 组件 | 用途 |

@@ -1,11 +1,11 @@
 ---
 name: kettu-shortmaster
-description: 给一个主题，产出一条黑底 MG 风格（幕底可选星点或点阵波）、有配音字幕章节进度条的科普讲解视频（中文或英文；Remotion 代码动画；时长由用户定，常用 3–5 分钟）。内含可编译模板、图元库、配音/分镜/渲染工具、风格与动效规范、多 agent 分工协议与 QC 判据，以及一条完整样片（《RAG 与知识库》）作为质量标尺。Turn any topic into a narrated motion-graphics explainer video in Chinese or English, on a black canvas with a star-field or dot-field backdrop, TTS voiceover, subtitles and a chapter progress bar, every frame drawn in code with Remotion. Use when the user asks for an explainer, educational or science-communication video about a topic, or wants an article or document turned into a video.
+description: 给一个主题，产出一条黑底 MG 风格（幕底可选星点或点阵波）、有配音字幕章节进度条的科普讲解视频（中文/英文/俄文；Remotion 代码动画；时长由用户定，常用 3–5 分钟）。内含可编译模板、图元库、配音/分镜/渲染工具、风格与动效规范、多 agent 分工协议与 QC 判据，以及两条完整样片（`examples/lovinggrace/`、`examples/mind-viruses/`）作为质量标尺。Turn any topic into a narrated motion-graphics explainer video in Chinese, English or Russian, on a black canvas with a star-field or dot-field backdrop, TTS voiceover, subtitles and a chapter progress bar, every frame drawn in code with Remotion. Use when the user asks for an explainer, educational or science-communication video about a topic, or wants an article or document turned into a video.
 ---
 
 # Kettu-Shortmaster
 
-把任意技术/知识主题做成一条**原创**科普讲解视频。视觉体系固定（黑底幕底——点阵波默认、星点雾底可选（`config.bg`）、白线条图形 + 紫色重点、超粗黑体、44px 白字黑边字幕、底部章节进度条、顶部胶囊 HUD），变化的是内容与规模：时长由用户定（确认点 1），解说词、分镜、镜头代码随之而变。样片：`examples/rag/`（4′35″，44 句、44 镜头，8 个构建组并行 40 分钟，两轮 QC）。**目标是和样片风格一致、质量相近**——先看 `examples/rag/frames/overview_*.jpg` 建立标尺，再开工。
+把任意技术/知识主题做成一条**原创**科普讲解视频。视觉体系固定（黑底幕底——点阵波默认、星点雾底可选（`config.bg`）、白线条图形 + 紫色重点、超粗黑体、44px 白字黑边字幕、底部章节进度条、顶部胶囊 HUD），变化的是内容与规模：时长由用户定（确认点 1），解说词、分镜、镜头代码随之而变。样片：`examples/lovinggrace/`（9:16 俄语，3′52″）与 `examples/mind-viruses/`（16:9 俄语，3′54″）。**目标是和样片风格一致、质量相近**——先看这两条成片建立标尺，再开工。
 
 ## 何时用
 - 用户给出主题（"讲一下 X"）要一条讲解视频；或给出一篇文章/文档要改成视频。
@@ -18,7 +18,7 @@ description: 给一个主题，产出一条黑底 MG 风格（幕底可选星点
 4. **闪烁只给重点**：每个镜头 ≤1 处 GlitchIn，只给该镜头的核心术语；其余文字/标签/HUD 换词一律 `SoftIn` 淡入。
 5. **字幕带 y637–690 与进度条 y687–720 不放内容**；入场轨迹不得穿过字幕带；镜头衔接必须"前一镜头末 N 帧离场到 α=0 + 后一镜头首帧起入场"；**章界还要有内容承接**——章末解说留钩子、章首先回指上一章成果再开题、章首镜头承接上一章的主角 / 象征物，不能「讲完就切卡」（细则 `reference/narration-storyboard.md` §1「章界要有起承转合」与 `narration-guidance.md` §13）。
 6. **持续动作 + 落位停留，「入场即停」和「落位即切」都是缺陷**：每个字幕块的动词要有持续到下一拍的动作（数据流 / 打字机 / 逐格点亮 / 光点沿线跑），元素入场后不许完全静止 >3 s；**不为凑指标给静止的物体加漂浮、飘动、呼吸**。每个镜头末拍元素落位后要有 **30–45 帧（1–1.5 s）稳定期**再离场：稳定期内不新增元素、不运镜、不换 HUD，已在跑的动词动作可以继续。没有其它运镜的镜头可加 1.0→1.05 慢推。`scripts/motion_check.py` 量化（最长静止 ≤3 s、末拍稳定期 ≥30 帧，成片复测为准）。细则 `reference/composition-and-light.md` §7。
-7. **每镜头一个主角、光跟主角、有运镜**：主角高度 ≥170px 或大字 ≥96px 并带紫柔光 / 光环 / 硬投影；配角不发光；内容区最大物体 <110px 不得持续 >45 帧；每章 ≤1 个高光时刻按各自类型编排、≥3 次运镜；**三轮紫光横扫（`LightSweep` + `StageLine` + `GhostText` 的登场型开场）全片 ≤2 处，只给本片核心概念首次登场（可选再给结尾回扣），写进分镜「扫光白名单」，其余高光时刻不用扫光**；背景只有幕底（星点或点阵波），不撒碎屑。细则 `reference/composition-and-light.md` 与 `motion-vocabulary.md` §镜头运动，反例 `examples/contrast/`。
+7. **每镜头一个主角、光跟主角、有运镜**：主角高度 ≥170px 或大字 ≥96px 并带紫柔光 / 光环 / 硬投影；配角不发光；内容区最大物体 <110px 不得持续 >45 帧；每章 ≤1 个高光时刻按各自类型编排、≥3 次运镜；**三轮紫光横扫（`LightSweep` + `StageLine` + `GhostText` 的登场型开场）全片 ≤2 处，只给本片核心概念首次登场（可选再给结尾回扣），写进分镜「扫光白名单」，其余高光时刻不用扫光**；背景只有幕底（星点或点阵波），不撒碎屑。细则 `reference/composition-and-light.md` 与 `motion-vocabulary.md` §镜头运动。
 8. **镜头按画面单元分，不按句分**：短句（<3 s 或只有一个字幕块）并入相邻镜头当一个节拍，不单独入场 + 离场；单镜头 ≥120 帧；能承接（同一元素带到下一镜头）就不清场。停留预算靠时长换：解说词用**空行分段**（一段 = 一个镜头 2–4 句），`tts_build.py` 段内句间只留 10 帧、段末 30 帧（`GAP` / `PARA_GAP`）——**小句之间不加停顿，只有一段话讲完或切下一个画面时才停**；成片比纯语音长 5–8% 是设计内的，不要为压时长删停留。
 
 ## 四个确认点（必须停下来等用户回话，不要自己往下走）
@@ -75,8 +75,7 @@ description: 给一个主题，产出一条黑底 MG 风格（幕底可选星点
 | `template/scripts/frame_metrics.py` | 逐镜头量最大物体高度 / 主角区柔光 / 紫色碎片 / 静止段，输出带严重度标记的表 |
 | `template/scripts/motion_check.py` | 节奏体检：组级 `motion_check.py Gn`（≈10 s）/ 成片 `--frames fin_frames`（判据），每镜头最长静止（>3 s 缺陷）、末拍稳定期（<30 帧缺陷）、静止占比（仅参考）+ 真静 / 小面积动作分类；`--shots index` 从 index.ts 取镜头区间 |
 | `template/scripts/selfcheck.py` | 主会话静态自检（不渲染）：帧覆盖与分镜表对账、GlitchIn 计数 vs 闪烁白名单、LightSweep / StageLine / GhostText vs 扫光白名单、画面字面量 vs 事实清单 |
-| `examples/contrast/` | 6 组反例（广告竞价片）/ 正例（RAG 样片）帧对照 + 说明 |
-| `examples/rag/` | 样片全套：调研、解说词、分镜源与成品、时间轴、构建/QC 协议、QC 报告、镜头源码 `shots_src/`、图元 `ui_rag.tsx`、成片帧 `frames/` |
+| `examples/` | 我们的成片样片：`lovinggrace/`（9:16 俄语）、`mind-viruses/`（16:9 俄语） |
 
 ## 质量标尺（对照样片）
 - 画面：每帧只有一个视觉焦点，**主角 ≥170px 且带光**；紫色只给当前重点；文字 ≥22px；图形 2–3px 白描边黑填充；幕底（星点雾底或点阵波）常驻不被盖；**最大物体 <110px 不得持续 >45 帧，背景无碎屑**。

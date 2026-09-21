@@ -4,7 +4,7 @@ import {clamp01, easeInOutPow} from './common';
 import {CText, PURPLE, PURPLE_LIGHT, WHITE, GLOW_PURPLE, abs} from './ui';
 
 /**
- * 光效 / 高光时刻 / 纵深 / 运镜 图元（从样片《RAG 与知识库》各组辅助文件升级而来；规则见 reference/composition-and-light.md）。
+ * 光效 / 高光时刻 / 纵深 / 运镜 图元（从样片各组辅助文件升级而来；规则见 reference/composition-and-light.md）。
  * 镜头里 `import {…} from '../../fx'`。全部纯函数：动画量由镜头按 N 算好传入，或传 N/f0 让组件自己算相对帧。
  * 用途速查：
  *   LightBar / LightSweep  紫光条横扫（高光时刻开场，三轮）
